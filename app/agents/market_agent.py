@@ -240,7 +240,7 @@ def recommend(insight: MarketInsight, metrics: list, playbook: dict[str, str]) -
                 priority="high",
                 channel="Website",
                 action=f"Create comparison page against {leader.competitor} with pricing, proof, and use-case fit.",
-                rationale=f"{leader.competitor} leads pressure at {leader.market_pressure}; buyer likely compares you there first.",
+                rationale=f"{leader.competitor} has the most observed public signals in this scan: {leader.market_pressure}.",
                 suggested_hook="Most comparison pages hide the tradeoff. Here is the honest one.",
                 source_competitor=leader.competitor,
             )

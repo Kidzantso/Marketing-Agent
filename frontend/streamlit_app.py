@@ -211,13 +211,13 @@ ok_sources, total_sources = source_health(run)
 st.title("Market Watch Command Center")
 st.caption(f"Run {run['run_id']} | public sources {ok_sources}/{total_sources} reachable | drafts require approval")
 
-top_pressure = int(metrics["market_pressure"].max()) if not metrics.empty else 0
+top_signals = int(metrics["market_pressure"].max()) if not metrics.empty else 0
 share_leader = metrics.iloc[0]["competitor"] if not metrics.empty else "n/a"
 avg_hook = round(metrics["avg_hook_score"].mean(), 1) if not metrics.empty else 0
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
-    metric_card("Market pressure", str(top_pressure), f"Leader: {share_leader}")
+    metric_card("Observed signals", str(top_signals), f"Most visible: {share_leader}")
 with col2:
     metric_card("Verified moves", str(len(verified)), "2-source rule where available")
 with col3:
@@ -241,7 +241,7 @@ with overview:
                 orientation="h",
                 color="share_of_voice",
                 color_continuous_scale="Blues",
-                labels={"market_pressure": "Market pressure", "competitor": ""},
+                labels={"market_pressure": "Observed public signals", "competitor": ""},
             )
             fig.update_layout(height=420, yaxis={"categoryorder": "total ascending"}, margin=dict(l=0, r=0, t=10, b=0))
             st.plotly_chart(fig, use_container_width=True)
@@ -260,13 +260,13 @@ with overview:
                 <div class="move-card">
                   <b>{item['competitor']}</b><br>
                   {item['top_move']}<br>
-                  <small>Pressure {item['market_pressure']} | SOV {item['share_of_voice']}%</small>
+                  <small>Observed signals {item['market_pressure']} | SOV {item['share_of_voice']}%</small>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
 
-    st.subheader("Strategic signal mix")
+        st.subheader("Strategic signal mix")
     if not metrics.empty:
         radar_source = metrics.head(5)
         fig = go.Figure()
@@ -280,12 +280,12 @@ with overview:
                         row["social_momentum"],
                         row["content_velocity"],
                     ],
-                    theta=["Pricing", "AI message", "Hiring", "Social", "Content"],
+                    theta=["Pricing mentions", "AI mentions", "Hiring mentions", "Captured pages", "Content pages"],
                     fill="toself",
                     name=row["competitor"],
                 )
             )
-        fig.update_layout(height=460, polar=dict(radialaxis=dict(visible=True, range=[0, 100])), margin=dict(l=20, r=20, t=20, b=20))
+        fig.update_layout(height=460, polar=dict(radialaxis=dict(visible=True)), margin=dict(l=20, r=20, t=20, b=20))
         st.plotly_chart(fig, use_container_width=True)
 
 with competitors_tab:
@@ -299,11 +299,29 @@ with competitors_tab:
         "verified_count",
         "pricing_transparency",
         "ai_message_score",
+        "hiring_signal_score",
         "social_momentum",
         "content_velocity",
         "avg_hook_score",
     ]
-    st.dataframe(metrics[display_cols] if not metrics.empty else metrics, use_container_width=True, hide_index=True)
+    if not metrics.empty:
+        st.dataframe(
+            metrics[display_cols].rename(
+                columns={
+                    "market_pressure": "observed_public_signals",
+                    "pricing_transparency": "pricing_mentions",
+                    "ai_message_score": "ai_mentions",
+                    "hiring_signal_score": "hiring_mentions",
+                    "social_momentum": "captured_public_pages",
+                    "content_velocity": "captured_content_pages",
+                    "avg_hook_score": "avg_hook_score_from_captured_text",
+                }
+            ),
+            use_container_width=True,
+            hide_index=True,
+        )
+    else:
+        st.dataframe(metrics, use_container_width=True, hide_index=True)
 
     st.subheader("What changed")
     findings = pd.DataFrame(run.get("findings", []))
@@ -357,26 +375,31 @@ with our_tab:
 
     st.subheader("Us vs market")
     if not metrics.empty:
-        our_social = min(100, round(company.get("avg_engagement_rate", 0) * 15 + company.get("posts_last_30d", 0) * 1.2))
-        our_reach = min(100, round((company.get("followers_linkedin", 0) + company.get("followers_x", 0)) / 100))
-        market_avg = {
-            "Social momentum": round(metrics["social_momentum"].mean()),
-            "Content velocity": round(metrics["content_velocity"].mean()),
-            "AI message": round(metrics["ai_message_score"].mean()),
-            "Pricing clarity": round(metrics["pricing_transparency"].mean()),
-        }
-        compare = pd.DataFrame(
+        public_compare = pd.DataFrame(
             [
-                {"metric": "Social momentum", company_name: our_social, "Competitor avg": market_avg["Social momentum"]},
-                {"metric": "Content velocity", company_name: min(100, company.get("posts_last_30d", 0) * 3), "Competitor avg": market_avg["Content velocity"]},
-                {"metric": "AI message", company_name: 78, "Competitor avg": market_avg["AI message"]},
-                {"metric": "Pricing clarity", company_name: 66, "Competitor avg": market_avg["Pricing clarity"]},
-                {"metric": "Reach index", company_name: our_reach, "Competitor avg": 55},
+                {"metric": "Public pages captured", "Competitor avg": round(metrics["public_sources"].mean(), 1)},
+                {"metric": "Pricing mentions", "Competitor avg": round(metrics["pricing_transparency"].mean(), 1)},
+                {"metric": "AI mentions", "Competitor avg": round(metrics["ai_message_score"].mean(), 1)},
+                {"metric": "Hiring mentions", "Competitor avg": round(metrics["hiring_signal_score"].mean(), 1)},
             ]
         )
-        fig = px.bar(compare, x="metric", y=[company_name, "Competitor avg"], barmode="group")
-        fig.update_layout(height=420, margin=dict(l=0, r=0, t=10, b=0), yaxis_title="Index")
+        fig = px.bar(public_compare, x="metric", y="Competitor avg")
+        fig.update_layout(height=420, margin=dict(l=0, r=0, t=10, b=0), yaxis_title="Observed count")
         st.plotly_chart(fig, use_container_width=True)
+        st.dataframe(
+            pd.DataFrame(
+                [
+                    {"metric": "Website visits / month", company_name: company.get("website_visits", 0), "Competitors": "N/A - private analytics"},
+                    {"metric": "Followers", company_name: company.get("followers_linkedin", 0) + company.get("followers_x", 0), "Competitors": "N/A - needs social API/export"},
+                    {"metric": "Posts last 30d", company_name: company.get("posts_last_30d", 0), "Competitors": "N/A - needs social API/export"},
+                    {"metric": "Demo requests / month", company_name: company.get("demo_requests", 0), "Competitors": "N/A - private CRM"},
+                    {"metric": "Pipeline value", company_name: company.get("pipeline_value", 0), "Competitors": "N/A - private CRM"},
+                ]
+            ),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.caption("No competitor private analytics are estimated. Only scraped public counts and user-entered company numbers are shown.")
 
 with recs_tab:
     st.subheader("What we should do next")

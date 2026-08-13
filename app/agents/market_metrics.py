@@ -11,10 +11,6 @@ def mentions(text: str, words: list[str]) -> int:
     return sum(lower.count(word) for word in words)
 
 
-def clamp(value: float, low: int = 0, high: int = 100) -> int:
-    return max(low, min(high, round(value)))
-
-
 def top_move(findings: list[RawFinding], pages: list[PublicPage]) -> str:
     if findings:
         return findings[0].claim_text
@@ -47,13 +43,13 @@ def run(
         competitor_pages = pages_by_competitor[competitor]
         text = " ".join(page.text for page in competitor_pages if page.text)
         source_urls = [page.url for page in competitor_pages if page.status_code and page.status_code < 400]
-        pricing_words = min(mentions(text, ["pricing", "plans", "$", "quote", "demo"]), 8)
-        ai_words = min(mentions(text, ["ai", "automation", "agent", "intelligence", "brief"]), 12)
-        hiring_words = min(mentions(text, ["career", "hiring", "jobs", "role"]), 8)
+        pricing_words = mentions(text, ["pricing", "plans", "$", "quote", "demo"])
+        ai_words = mentions(text, ["ai", "automation", "agent", "intelligence", "brief"])
+        hiring_words = mentions(text, ["career", "hiring", "jobs", "role"])
         hooks = hooks_by_competitor[competitor]
         avg_hook = round(sum(post.score for post in hooks) / len(hooks), 1) if hooks else 0.0
-        velocity = len([page for page in competitor_pages if re.search(r"blog|news|resource", page.label, re.I)]) * 20 + len(hooks) * 8
-        pressure = clamp(signal_counts[competitor] * 3 + ai_words * 1.5 + avg_hook * 4 + len(source_urls) * 3)
+        content_pages = len([page for page in competitor_pages if re.search(r"blog|news|resource|linkedin|x|twitter", page.label, re.I) and page.text])
+        observed_signals = signal_counts[competitor] + pricing_words + ai_words + hiring_words + len(source_urls)
         metrics.append(
             CompetitorMetric(
                 competitor=competitor,
@@ -61,14 +57,14 @@ def run(
                 public_sources=len(source_urls),
                 signal_count=signal_counts[competitor],
                 verified_count=verified_count_by_competitor.get(competitor, 0),
-                pricing_transparency=clamp(pricing_words * 10),
-                ai_message_score=clamp(ai_words * 6),
-                hiring_signal_score=clamp(hiring_words * 10),
-                social_momentum=clamp(avg_hook * 12 + len(hooks) * 6),
-                content_velocity=clamp(velocity),
+                pricing_transparency=pricing_words,
+                ai_message_score=ai_words,
+                hiring_signal_score=hiring_words,
+                social_momentum=len(hooks),
+                content_velocity=content_pages,
                 avg_hook_score=avg_hook,
                 share_of_voice=round(signal_counts[competitor] / total_signals * 100, 1),
-                market_pressure=pressure,
+                market_pressure=observed_signals,
                 top_move=top_move(findings_by_competitor[competitor], competitor_pages),
                 source_urls=source_urls[:5],
             )

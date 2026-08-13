@@ -55,6 +55,13 @@ python -m scripts.check_groq
 - Action tab with marketing recommendations, hooks, and next moves.
 - Scraped source health and raw URLs.
 
+## Metric Rules
+
+- Competitor metrics are observed public counts from scraped pages: reachable sources, findings, verified findings, keyword mentions, captured public pages, and source URLs.
+- Private competitor metrics such as traffic, followers, demo requests, revenue, pipeline, and conversion are never estimated. They show as `N/A` unless connected through a real API/export later.
+- Our business metrics are only the values entered in the sidebar and saved to `data/our_metrics.yaml`.
+- Social engagement numbers are not invented. Without a licensed social API/export, captured public pages are shown, not likes/comments/followers.
+
 ## Scope
 
 This build uses Groq-assisted market understanding, web competitor discovery, public web scraping, fixture social posts, JSON storage, FastAPI, and Streamlit.

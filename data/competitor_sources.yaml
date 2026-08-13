@@ -1,69 +1,52 @@
 competitors:
-  What:
-    category: Ai-Native Competitive Intelligence
+  Klue:
+    category: "Sales CI / battlecards"
     urls:
-      homepage: https://qfloo.com/
-      pricing: https://qfloo.com/pricing
-      blog: https://qfloo.com/blog
-      linkedin: https://www.linkedin.com/company/linkedin
-  Cloudflare Ray ID:
-    category: Ai-Native Competitive Intelligence
+      homepage: "https://klue.com/"
+      pricing: "https://klue.com/pricing"
+      blog: "https://klue.com/blog"
+  Crayon:
+    category: "Enterprise competitor monitoring"
     urls:
-      homepage: https://developers.cloudflare.com/
-      pricing: https://developers.cloudflare.com/pricing
-      blog: https://developers.cloudflare.com/blog
-      x: https://x.com/Cloudflare
-  Attention Required:
-    category: Ai-Native Competitive Intelligence
+      homepage: "https://www.crayon.co/"
+      pricing: "https://www.crayon.co/pricing/"
+      blog: "https://www.crayon.co/blog/"
+  Kompyte:
+    category: "Website and ad tracking"
     urls:
-      homepage: https://attention.com/
-      pricing: https://attention.com/pricing
-      blog: https://attention.com/blog
-  Cloudflare Please:
-    category: Ai-Native Competitive Intelligence
+      homepage: "https://www.kompyte.com/"
+      blog: "https://www.kompyte.com/blog/"
+  Contify:
+    category: "Market intelligence"
     urls:
-      homepage: https://cloudflare.com/
-      pricing: https://cloudflare.com/pricing
-      blog: https://cloudflare.com/blog
-      linkedin: https://www.linkedin.com/company/cloudflare
-  Sorry:
-    category: Ai-Native Competitive Intelligence
+      homepage: "https://www.contify.com/"
+      pricing: "https://www.contify.com/pricing/"
+      blog: "https://www.contify.com/blog/"
+  AlphaSense:
+    category: "Enterprise market intelligence"
     urls:
-      homepage: https://kompyte.com/
-      pricing: https://kompyte.com/pricing
-      blog: https://kompyte.com/blog
-      linkedin: https://www.linkedin.com/company/sorryapp/
-  Why:
-    category: Ai-Native Competitive Intelligence
+      homepage: "https://www.alpha-sense.com/"
+      blog: "https://www.alpha-sense.com/blog/"
+  Autobound:
+    category: "Sales intelligence"
     urls:
-      homepage: https://intelcue.ai/
-      pricing: https://intelcue.ai/pricing
-      blog: https://intelcue.ai/blog
-  This:
-    category: Ai-Native Competitive Intelligence
+      homepage: "https://www.autobound.ai/"
+      blog: "https://www.autobound.ai/blog"
+  Comintelli:
+    category: "Market intelligence platform"
     urls:
-      homepage: https://klue.com/
-      pricing: https://klue.com/pricing
-      blog: https://klue.com/blog
-      x: https://about.x.com/
-  Please:
-    category: Ai-Native Competitive Intelligence
+      homepage: "https://www.comintelli.com/"
+      blog: "https://www.comintelli.com/blog/"
+  Valona Intelligence:
+    category: "Market and competitive intelligence"
     urls:
-      homepage: https://competeiq.io/
-      pricing: https://competeiq.io/pricing
-      blog: https://competeiq.io/blog
-      x: https://x.com/twitter
-  Competitive Intelligence for SMBs:
-    category: Ai-Native Competitive Intelligence
+      homepage: "https://www.valonaintelligence.com/"
+      blog: "https://www.valonaintelligence.com/blog/"
+  Watchmycompetitor:
+    category: "Curated competitor monitoring"
     urls:
-      homepage: https://competitoranalyzer.com/
-      pricing: https://competitoranalyzer.com/pricing
-      blog: https://competitoranalyzer.com/blog
-      linkedin: https://www.linkedin.com/company/competitive-analytics
-  Fast:
-    category: Ai-Native Competitive Intelligence
+      homepage: "https://www.watchmycompetitor.com/"
+  IndustryLens:
+    category: "AI-native CI briefings"
     urls:
-      homepage: https://fast.io/
-      pricing: https://fast.io/pricing
-      blog: https://fast.io/blog
-      linkedin: https://www.linkedin.com/company/fast
+      homepage: "https://www.industrylens.com/"

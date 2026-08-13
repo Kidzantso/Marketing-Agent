@@ -64,7 +64,7 @@ def run_weekly(auto_discover: bool = False) -> RunResult:
     previous = GraphSnapshot.model_validate(previous_payload) if previous_payload else None
     changelog = change_log.run(graph, previous)
 
-    posts = social_listening.run(competitors)
+    posts = social_listening.run(competitors, public_pages)
     scored, playbook = hook_analysis.run(posts)
     drafts = content_strategist.run(playbook, company)
     verified_counts: dict[str, int] = {}
