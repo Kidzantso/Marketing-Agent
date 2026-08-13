@@ -1,0 +1,11 @@
+name: "Lumen Compete"
+one_liner: "AI-native competitive intelligence briefings for B2B SaaS teams without a dedicated CI hire."
+icp: "PMM or founder at a 20-150 person B2B SaaS company, no dedicated competitive-intel headcount"
+voice: "direct, specific, a little skeptical of hype, always cites a real number"
+banned_moves:
+  - "fake urgency"
+  - "unverifiable stats"
+  - "naming a customer without permission"
+platforms:
+  - LinkedIn
+  - X

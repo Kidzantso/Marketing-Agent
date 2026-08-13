@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+data/runs/
+data/approvals/
+*.log
+.mds/
+pyproject.toml
+PROGRESS.md
+tests/
